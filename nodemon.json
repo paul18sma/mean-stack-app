@@ -4,7 +4,10 @@
     ],
     "ext": "ts",
     "ignore": [
-        "src/**/*.spec.ts"
+        "**/*.test.ts",
+        "**/*.spec.ts",
+        ".git",
+        "node_modules"
     ],
-    "exec": "ts-node ./src/index.ts"
+    "exec": "npm run start:dev"
 }
