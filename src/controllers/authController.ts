@@ -1,13 +1,24 @@
 import {Request, Response} from 'express';
+import User from '../models/User';
 
 class AuthController {
 
-    signUp(req: Request, res: Response){
-        console.log('signup');
-        return res.send('SignUp');
+    public async signUp(req: Request, res: Response): Promise<Response>{
+        const { username, email, password} = req.body;
+        const newUser = new User({ username, email, password });
+        try{
+            await newUser.save();
+            return res.json({
+                msg: "Sign up successfully!",
+                newUser
+            });
+
+        }catch(e){
+            return res.json(e.errors).status(422);
+        }
     }
 
-    signIn(req: Request, res: Response){
+    public signIn(req: Request, res: Response){
         console.log('signin');
     }
 }
