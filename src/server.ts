@@ -5,7 +5,6 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import compression from 'compression';
 
-import indexRoutes from './routes/index';
 import authRoutes from './routes/auth';
 
 class Server {
@@ -49,4 +48,6 @@ class Server {
     }
 }
 
-export default Server;
+const server = new Server();
+
+server.start();
