@@ -1,9 +1,13 @@
 import {Request, Response} from 'express';
-import User from '../models/User';
+import * as JWT from 'jsonwebtoken';
+import config from '../config/passport';
+
+
+import User, { IUserModel }  from '../models/User';
 
 class AuthController {
 
-    public async signUp(req: Request, res: Response): Promise<Response>{
+    public signUp = async (req: Request, res: Response): Promise<Response> => {
         const { username, email, password} = req.body;
         const newUser = new User({ username, email, password });
         try{
@@ -18,8 +22,24 @@ class AuthController {
         }
     }
 
-    public signIn(req: Request, res: Response){
-        console.log('signin');
+    public signIn = (req: Request, res: Response): Response => {
+        
+        const user = req.user as IUserModel;    
+        const token = this.signInToken(user);
+        
+        return res.status(200).json({
+            msg: 'User sign in successfully!',
+            token
+        });  
+    }
+
+    private signInToken = (user: IUserModel): string => {
+        return JWT.sign({
+            iss: "naapi",
+            sub: user.id,
+            iat: new Date().getTime(),
+            exp: new Date().setDate(new Date().getDate() + 1)
+        }, config.JWT_SECRET);
     }
 }
 
