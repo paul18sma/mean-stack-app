@@ -33,10 +33,19 @@ class AuthController {
         });  
     }
 
+    public profile = (req: Request, res: Response) => {
+        const { username, email } = req.user as IUserModel;
+        return res.json({
+            msg: "profile",
+            username, 
+            email
+        });
+    }
+
     private signInToken = (user: IUserModel): string => {
         return JWT.sign({
             iss: "naapi",
-            sub: user.id,
+            sub: user._id,
             iat: new Date().getTime(),
             exp: new Date().setDate(new Date().getDate() + 1)
         }, config.JWT_SECRET);

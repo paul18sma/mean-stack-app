@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import authController from '../controllers/authController';
-import { passportMiddlewareLocal } from '../middlewares/passportConfig';
+import { passportMiddlewareLocal, passportMiddlewareJwt } from '../middlewares/passportConfig';
 
 class IndexRoutes {
 
@@ -14,6 +14,7 @@ class IndexRoutes {
     routes(): void {
         this.router.post('/signup', authController.signUp);
         this.router.post('/signin', passportMiddlewareLocal, authController.signIn);
+        this.router.get('/profile', passportMiddlewareJwt, authController.profile);
     }
 }
 
