@@ -13,8 +13,6 @@ COPY . .
 # Transpilate TS code to JS
 RUN npm run build
 
-WORKDIR ./dist  
+WORKDIR ./dist
 
 EXPOSE 4000
-
-CMD node src/index.js
