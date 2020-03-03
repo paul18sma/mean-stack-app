@@ -1,9 +1,9 @@
 import express from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import compression from 'compression';
+import * as db from './database';
 
 import authRoutes from './routes/auth';
 
@@ -17,14 +17,7 @@ class Server {
     }
 
     config() {
-        const MONGO_URI = 'mongodb://localhost/authrestapi';
-        mongoose.set('useFindAndModify', true);
-        mongoose.connect(MONGO_URI, {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useUnifiedTopology: true
-        }).then( db => console.log('DB is connected') );
-        // setting
+        db.initializeMongo();
         this.app.set('port', process.env.PORT || 4000);
         // middleware
         this.app.use(express.json());
