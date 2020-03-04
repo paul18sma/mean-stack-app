@@ -1,0 +1,40 @@
+version: '3'
+services:
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        restart: always
+        container_name: nginx-proxy
+        ports: 
+            - "80:80"
+        volumes: 
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+    
+    nginx:
+        image: nginx
+        restart: always
+        expose:
+            - "80"
+        volumes:
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        environment: 
+            - VIRTUAL_HOST=dev2.local.sma,www.dev2.local.sma
+        depends_on:
+            - nodeappi
+
+    nodeappi:
+        restart: always
+        build: ./server
+        command: ["npm", "start"]
+        container_name: node-api
+        depends_on: 
+            - db
+
+    db:
+        container_name: mongo
+        image: mongo
+        expose:
+            - "27017"
+        volumes:
+            - mongodata:/data/db
+volumes:
+    mongodata:
